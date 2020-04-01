@@ -13,9 +13,11 @@ import { Global } from '../../services/global';
 export class CreateComponent implements OnInit {
 	
 	public title: string;
-	public project: Project;	
+	public project: Project;
+  public save_project;
   public status: string;
   public filesToUpload: Array<File>;
+  public url: string;
 
   constructor(
   	private _projectService: ProjectService,
@@ -23,6 +25,7 @@ export class CreateComponent implements OnInit {
   ){
   	this.title = "Crear proyecto";
   	this.project = new Project('','','','',2020,'','');
+    this.url = Global.url;
   }
 
   ngOnInit(): void {
@@ -35,8 +38,9 @@ export class CreateComponent implements OnInit {
         if(response.project) {
           //Subir la imagen
           this._uploadService.makeFileRequest(Global.url+"upload-image/"+response.project._id, [], this.filesToUpload, 'image').then((result: any) => {
+            this.save_project = result.project;
+
             this.status = 'success';
-            console.log(result);
             form.reset();
           });
         } else {
